@@ -9,7 +9,7 @@ before_action :authenticate_user!
 		@parameter = params[:name]
 		
 		if  @parameter.empty?
-			@error_null = {'value': 'You have to put some data'}
+			@error_null = {value: 'You have to put some data'}
 			puts "this guy is empty"
 			render json: @error_null
 		else #check if it is the same user
@@ -18,7 +18,7 @@ if User.exists? username: @parameter
 				puts "ok fine it is a user"
 			#check if he is the same user		
 			if @parameter == current_user.username 
-				@error_addSelf = {'same': 'You can not add your self !'}
+				@error_addSelf = {same: 'You can not add your self !'}
 				puts "add your self nigger"
 				render json: @error_addSelf
 			else
@@ -26,7 +26,7 @@ if User.exists? username: @parameter
 				@fid = User.find_by(username: params[:name])
 				@user = current_user
 				if @user.friendships.exists? friend_id: @fid.id
-				    @error_addExist = {'exist': 'You already added this friend !'}
+				    @error_addExist = {exist: 'You already added this friend !'}
 					puts "your friend is already here"
 			        render json: @error_addExist
 				else
