@@ -17,21 +17,36 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Title</a>
+                    <a class="navbar-brand" href="/">Yalla Notlob</a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav">
                         <li class="active">
-                            <a href="#">Link</a>
+                            <a href="/">Home</a>
                         </li>
                         <li>
-                            <a href="#">Link</a>
+                            <a href="/friends/new">Friends</a>
+                        </li>
+                        <li>
+                            <a href="/groups/new">Groups</a>
+                        </li>
+                        <li>
+                            <a href="/orders">Orders</a>
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                       <% if user_signed_in? %>
+                        <!-- Logout -->
+                        <%= link_to "Logout", destroy_user_session_path, method: :delete %>
+                        &nbsp; &nbsp;
+                        <!-- user image -->
+                        <%= current_user.username %>
+                        &nbsp; &nbsp;
+                         <img src="<%= current_user.image.thumb.url %>"/>
+                         &nbsp; &nbsp;
+
                         <!--  notification area -->
 
                         <div class="dropdown">
@@ -92,6 +107,7 @@
 
 </body>
 </html>
+
 <% if user_signed_in? %>
   <!-- true -->
   <%= subscribe_to "/notifications/user/#{current_user.id}" %>

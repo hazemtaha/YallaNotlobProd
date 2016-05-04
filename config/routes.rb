@@ -1,17 +1,11 @@
 Rails.application.routes.draw do
   get 'home/index'
-  resources :orders do
-    # get 'order_items/index'
 
-    # get 'order_items/new'
-
-    # post 'order_items/create'
-
-    # delete 'order_items/destroy'
+  resources :orders do 
     resources :items
     get '/invited_users' => 'orders#order_invited_users'
     get '/joined_users' => 'orders#order_joined_users'
-  end
+  end 
   get 'user/registeration'
   devise_for :users, :controllers => { registrations: 'user', omniauth_callbacks: 'users/omniauth_callbacks' }
   devise_scope :user do
@@ -22,9 +16,11 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  root 'home#index'
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
+    get 'order/:id/finish' => 'orders#finish'
+    get 'order/:id/cancel' => 'orders#cancel'
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase

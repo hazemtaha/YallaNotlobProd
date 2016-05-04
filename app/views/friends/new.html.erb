@@ -1,6 +1,6 @@
 <h1><code>Add Friends</code></h1>
+<p id="error_null" class="col-sm-3"></p>
 <%= render 'form' %>
-
 <br><br>
 <div class="container col-sm-offset-1 col-sm-9">
 	<div class="panel panel-danger">
@@ -31,20 +31,46 @@ $('.addFriend').click(function(e){
             name: name,
         },
         success: function(response) {    
-        	
-        	$('.row').append(
+        	//alert(response.value);
+      if (typeof response.value === 'undefined'){
+
+        if(typeof response.notValid === 'undefined'){
+        
+          $('#error_null').empty();  
+          if (typeof response.same === 'undefined'){
+
+             if (typeof response.exist === 'undefined'){
+          $('.row').append(
         		"<div class='col-sm-offset-1  col-sm-3'><div class='panel-success'><img src="+response.image.url+" class='img-circle' alt='Cinque Terre' width='170' height='150'><div class='textDesc' align='center'><h4><code>"+response.username+"</code></h4><a href='#''>Unfriend</a></div></img></div></div>"	
-        	);      	
+        	     );
+              }else{ //for exist user
+                $('#error_null').empty();  
+                $('#error_null').append("<strong> * "+response.exist+"</strong>");  
+              }
+          }else{//for the same user
+              $('#error_null').empty();  
+              $('#error_null').append("<strong> * "+response.same+"</strong>");  
+          };//else res.same user
+        }else{
+           $('#error_null').empty();  
+           $('#error_null').append("<strong> * "+response.notValid+"</strong>");  
+        }  
+      }else{ //for the response . value
+          $('#error_null').empty();  
+          //$('#error_null').text(response.value);  
+          $('#error_null').append("<strong> * "+response.value+"</strong>");  
+          };
+
         	console.log(response);
-        },
-        error: function(xmlHttpRequestObj, status, error) {
+          },
+          error: function(xmlHttpRequestObj, status, error) {
             console.log(error);
-        },
-        complete: function(xmlHttpRequestObj) {
+          },
+          complete: function(xmlHttpRequestObj) {
             console.log("complete");
-        },
-        // dataType: 'json',
-        async: true
+          },
+          // dataType: 'json',
+          async: true
     });
 	
 

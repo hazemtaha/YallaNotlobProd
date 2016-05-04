@@ -1,10 +1,45 @@
 class OrdersController < ApplicationController
   skip_before_action :verify_authenticity_token
+  before_action :authenticate_user!
   def index
-    @orders = Order.all.where(user_id: current_user.id).order(created_at: :desc)
+    @orders = Order.where(user_id: current_user.id)
+    @iorders = Order.includes(:order_invites).reorder("orders.created_at DESC").where(order_invites: {user_id: current_user.id})
+    # @orderInvitationCount = OrderInvite.joins(:order).where(orders: {user_id: current_user.id}).count
+    @orders_all = Order.all
+    puts @orders_all
+    @order_invites = []
+
+    @orders_all.each { |order| @order_invites.push({invited: order.order_invites.count,
+      joined: order.order_invites.where(invite_status: 1).count })  }
+    # puts @orders_new.order_invites.inspect
+    puts "coountttttttttttttttttttttt"
+    # puts @orders.inspect
   end
 
 
+  def finish
+    @orders = Order.find params[:id]
+    if @orders.user_id  == current_user.id
+      @orders.update_attributes(:status => 'Finished')
+      @orders.save()
+      puts "THis THe inspect"
+      puts @orders.inspect
+    end
+      redirect_to '/orders'
+  end
+
+
+
+  def cancel
+    @orders = Order.find params[:id]
+    if @orders.user_id  == current_user.id
+        if @orders.destroy
+          redirect_to '/orders'
+        end
+    else
+          redirect_to '/orders'   
+    end    
+  end
 
   def new
   	@order = Order.new

@@ -1,6 +1,10 @@
 <h1><code>Add New Group</code></h1>
+            <!-- Errors -->
+        <strong id="groupErrors" class="col-sm-offset-2 col-sm-8" style='color:red;'></strong>
+        <!-- Errors -->
 
 <%= render 'form' %>
+
 
 
 <br><br>
@@ -17,7 +21,7 @@
         				<th colspan="2" align="center">Actions</th>
       				</tr>
     		</thead>
-    		<tbody>
+    		<tbody id="table">
         		    <% @group.each do |groups| %>
       				<tr>
 						<td><%= groups.name %></td>
@@ -43,6 +47,8 @@
 		<div class="panel panel-danger">
   		<div class="panel-heading" align="center"><h4 id="gName"></h4></div>
   		<div class="panel-body">
+
+        <div id="error_null" class="col-sm-offset-4 col-sm-8"></div><br>
         <%= render 'friends/form' %>
         <!-- The Div that show friends of that group -->
         <div class="row gmembers">
@@ -140,9 +146,41 @@ $('.addFriend').click(function(e){
                       username: username,
                     },
                     success: function(friend) {
+
+if (typeof friend.nullValue === 'undefined') {
+
+  if(typeof friend.notExist === 'undefined') {
+
+      if(typeof friend.addExist === 'undefined') {
+
+        if(typeof friend.notFriend === 'undefined') {
+
+          if(typeof friend.same === 'undefined') {
+
+                      $('#error_null').empty();  
                       $('.gmembers').append(
                       "<div class='col-sm-offset-1  col-sm-3'><div class='panel-success'><img src="+friend.image.url+" class='img-circle' alt='Cinque Terre' width='120' height='100'><div class='textDesc' align='center'><h4><code>"+friend.username+"</code></h4><a href='#''>Remove</a></div></img></div></div>"  
                         );
+           }else{
+                      $('#error_null').empty();  
+                      $('#error_null').append("<strong style=color:red;> * "+friend.same+"</strong>");
+           }           
+        }else{ //if it is not a friend
+                      $('#error_null').empty();  
+                      $('#error_null').append("<strong style=color:red;> * "+friend.notFriend+"</strong>");
+            }          
+      }else{ //if it is already assigned to the group
+                      $('#error_null').empty();  
+                      $('#error_null').append("<strong style=color:red;> * "+friend.addExist+"</strong>");
+      }                
+  }else{//if not valid
+                      $('#error_null').empty();  
+                      $('#error_null').append("<strong style=color:red;> * "+friend.notExist+"</strong>");
+       }                                          
+}else{//if no null
+                      $('#error_null').empty();  
+                      $('#error_null').append("<strong style=color:red;> * "+friend.nullValue+"</strong>");
+}
                     },
                     error: function(xmlHttpRequestObj, status, error) {
                        console.log(error);
