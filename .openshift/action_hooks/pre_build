@@ -1,0 +1,10 @@
+source $OPENSHIFT_CARTRIDGE_SDK_BASH
+source ${OPENSHIFT_RUBY_DIR}/lib/ruby_context
+
+pushd ${OPENSHIFT_REPO_DIR} >/dev/null
+if [[ -f .openshift/markers/force_clean_build && "$RAILS_ENV" == "development" ]]
+then
+  echo "bundle install --path ./vendor/bundle"
+  ruby_with_nodejs_context "bundle install --path ./vendor/bundle"
+fi
+popd > /dev/null
