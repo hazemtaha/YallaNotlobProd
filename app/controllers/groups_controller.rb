@@ -56,7 +56,7 @@ class GroupsController < ApplicationController
 			#check if it is null
 		if @friendName.empty?
 			puts "empty friend"
-			@error_null = {'nullValue': 'Please insert some data !'}
+			@error_null = {nullValue: 'Please insert some data !'}
 			render json: @error_null
 		else
 			#check if it is wrong type
@@ -64,7 +64,7 @@ class GroupsController < ApplicationController
 			#it is really a user
 			#check if he is tring to add himself
 			if @friendName == current_user.username	
-				@error_addSelf = {'same': 'You can not add your self !'}
+				@error_addSelf = {same: 'You can not add your self !'}
 				render json: @error_addSelf
 			  else	
 			#check if the user exist in the group itself before
@@ -72,7 +72,7 @@ class GroupsController < ApplicationController
 				@current_group = Group.find(params[:groupId])
 				if @current_group.group_members.exists? user_id: @fid.id  	  
 					puts "why you are tring to add the same friend"
-					@error_addExist = {'addExist': 'This user is already assigned to this group !'}
+					@error_addExist = {addExist: 'This user is already assigned to this group !'}
 					render json: @error_addExist
 				else
 					#check if this user in friendship list or not
@@ -87,7 +87,7 @@ class GroupsController < ApplicationController
 					@group = @fid.group_members.create(group_id: @gid)
 					render json: @fid
 				    else
-					@error_notFriend = {'notFriend': 'This user is not currently in your friend list!'}
+					@error_notFriend = {notFriend: 'This user is not currently in your friend list!'}
 					render json: @error_notFriend				    	
 				    end
 				end					
@@ -96,7 +96,7 @@ class GroupsController < ApplicationController
 			end	
 			else
 			#it is a robot
-			@error_notExist = {'notExist': 'This user is not exist !'}
+			@error_notExist = {notExist: 'This user is not exist !'}
 			render json: @error_notExist
 			end	
 		end		
