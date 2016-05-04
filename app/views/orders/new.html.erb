@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="form-group col-sm-8 pull-left">
+        <h1>Add Order</h1>
+        <%= form_for @order, html: { multipart: true  }, remote: true do |f| %>
+        <div class="errors">
+
+        </div>
+        <%= f.label :order_type, {class: "control-label", value: "For"}%>
+        <%= f.select :order_type, Order.order_types,{}, class: "form-control" %>
+        <br>
+        <%= f.label :destination, {class: "control-label", value: "From"}%>
+        <%= f.text_field :destination, {class: "form-control",placeholder: "Write A resturant name"} %>
+        <br>
+        <label for="add-friend">Invite Friends</label>
+        <input type="text" name="friends" id="invite_friend" class="form-control">
+        <br>
+        <%= f.label :menu_img, {class: "control-label", value: "Menu Image"}%>
+        <%= f.file_field :menu_img %> <div id="file_name">
+
+        </div>
+        <br>
+        <div id="invites-area"></div>
+        <div id="groups-area"></div>
+        <%= f.hidden_field :user_id, value: current_user.id %>
+        <%= f.submit "Add Order", {class: "btn btn-info", id: "submit"} %>
+        <% end %>
+    </div>
+    <div class="col-sm-4">
+        <h1>Friends Invited</h1>
+        <div id="friends-invited"></div>
+    </div>
+</div>

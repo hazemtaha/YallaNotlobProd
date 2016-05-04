@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>YallaNotlob</title>
+        <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+        <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+        <%= csrf_meta_tags %>
+    </head>
+    <body>
+        <nav class="navbar navbar-primary" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Title</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="#">Link</a>
+                        </li>
+                        <li>
+                            <a href="#">Link</a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                      <% if user_signed_in? %>
+                        <!--  notification area -->
+
+                        <div class="dropdown">
+                            <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html"><span class="label label-primary" style="font-size: .9em" id="new_notification_number"><%=  current_user.order_invites.where(invite_status: "Pending").count %></span>
+                                <i class="glyphicon glyphicon-bell" style="font-size: 1.5em">
+                                </i>
+                            </a>
+
+                            <ul class="dropdown-menu notifications" role="menu" aria-labelledby="dLabel">
+
+                                <div class="notification-heading">
+                                    <h4 class="menu-title">Notifications</h4>
+                                    <!-- <h4 class="menu-title pull-right">View all<i class="glyphicon glyphicon-circle-arrow-right"></i>
+                                    </h4> -->
+                                </div>
+                                <li class="divider"></li>
+                                <div class="notifications-wrapper">
+                                  <% current_user.order_invites.each do |invite| %>
+                                  <% if invite.order.status == "Waiting" && invite.invite_status == 0 %>
+
+                                    <a class="content" href="#">
+                                        <div class="notification-item">
+                                            <h4 class="item-title"><%= invite.order.user.username.titleize + " invited you to" %>
+                                            <% if invite.order.user.gender == "0" %>
+                                              <!-- true -->
+                                              his
+                                            <% else %>
+                                              her
+                                            <% end %>
+                                            new order <small><%= time_ago_in_words invite.created_at %></small>
+                                            </h4>
+                                            <p class="item-info"><%= link_to 'Join now', invite.order %></p>
+                                        </div>
+
+                                    </a>
+                                    <% end %>
+
+                                  <% end %>
+
+                                </div>
+                                <li class="divider"></li>
+                                <div class="notification-footer">
+                                    <h4 class="menu-title">Notifications<!--<i class="glyphicon glyphicon-circle-arrow-right"></i>-->
+                                    </h4>
+                                </div>
+                            </ul>
+
+                        </div>
+                        <!--  end of notifications area -->
+                        <% end %>
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+    </nav>
+    <%= yield %>
+
+</body>
+</html>
+<% if user_signed_in? %>
+  <!-- true -->
+  <%= subscribe_to "/notifications/user/#{current_user.id}" %>
+<% end %>

@@ -1,0 +1,75 @@
+<div class="container">
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="panel panel-primary">
+			    <div class="panel-heading">
+			        Latest Orders
+			    </div>
+			    <div class="panel-body">
+			        <div class="row">
+			            <div class="col-lg-12">
+			            <% @orders.each do |order| %>
+							<% if order.order_type == 1  %>
+								<% food  = 'BreakFast' %>
+							<% end	%>
+							<% if order.order_type == 2  %>
+								<% food  = 'Launch' %>
+							<% end	%>
+							<% if order.order_type == 3  %>
+								<% food  = 'Dinner' %>
+							<% end	%>
+							<b>
+							<%= link_to   order_url(order) do %>
+							<%= food %> on <%= order.created_at %> </b>
+							<% end %>
+							<br>
+						<% end %>  
+			            </div>
+			        </div>
+			    </div>
+			</div>
+		</div>
+
+
+		<div class="col-sm-6">
+			<div class="panel panel-primary">
+			    <div class="panel-heading">
+			        Friend's activties
+			    </div>
+			    <div class="panel-body">
+			        <div class="row">
+			            <div class="col-lg-12">
+					        <% @all.each do |gorder| %>
+								<% gorder.each do |order|%>
+								<% if order.order_type == 1  %>
+									<% food  = 'BreakFast' %>
+								<% end	%>
+								<% if order.order_type == 2  %>
+									<% food  = 'Launch' %>
+								<% end	%>
+								<% if order.order_type == 3  %>
+									<% food  = 'Dinner' %>
+								<% end	%>
+								<b>
+								<%= order.user.username %> has created an order for <%= food %> from <%= order.destination %> 
+								<% end %> </b>
+
+								<br>
+							<% end %>  
+			            </div>
+			        </div>
+			    </div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+
+
+
+
+
+
+

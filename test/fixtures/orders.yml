@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  destination: MyString
+  menu_img: MyString
+  type: 1
+  status: 1
+  user_id: 
+
+two:
+  destination: MyString
+  menu_img: MyString
+  type: 1
+  status: 1
+  user_id: 

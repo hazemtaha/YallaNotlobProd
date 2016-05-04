@@ -1,0 +1,14 @@
+  	   <% @friend_to_group.each do |friend| %>
+				<div class="col-sm-offset-1  col-sm-3">
+					<div class="panel-success">
+						<img src='<%= friend.image.url %>' class="img-circle" alt="Cinque Terre" width="120" height="100">
+							<div class="textDesc" align="center">
+								<h4><code><%= friend.username %></code></h4>
+							    <%= link_to 'Unfriend',
+               						      method: :delete,
+               						      data: { confirm: 'Are you sure you want to delete friend?' } %>
+						    </div>
+						 </img>
+				   </div>
+			</div>
+  		<%end%>

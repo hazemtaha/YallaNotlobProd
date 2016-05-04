@@ -1,0 +1,54 @@
+<h1><code>Add Friends</code></h1>
+<%= render 'form' %>
+
+<br><br>
+<div class="container col-sm-offset-1 col-sm-9">
+	<div class="panel panel-danger">
+  		<div class="panel-heading"><h4>Friends List</h4></div>
+  		<div class="panel-body">
+  	
+
+  			<div class="row">
+  			  <%= render :file => 'friends/show' %>
+  			</div>	
+			
+
+  		</div>
+  	</div>	
+</div>
+
+
+<script type="text/javascript">
+
+$('.addFriend').click(function(e){
+	var name = jQuery('.friendName').val()
+	//alert(username);
+	console.log(name);	
+	$.ajax({
+        url: "/friends",
+        method: 'POST',
+        data: {
+            name: name,
+        },
+        success: function(response) {    
+        	
+        	$('.row').append(
+        		"<div class='col-sm-offset-1  col-sm-3'><div class='panel-success'><img src="+response.image.url+" class='img-circle' alt='Cinque Terre' width='170' height='150'><div class='textDesc' align='center'><h4><code>"+response.username+"</code></h4><a href='#''>Unfriend</a></div></img></div></div>"	
+        	);      	
+        	console.log(response);
+        },
+        error: function(xmlHttpRequestObj, status, error) {
+            console.log(error);
+        },
+        complete: function(xmlHttpRequestObj) {
+            console.log("complete");
+        },
+        // dataType: 'json',
+        async: true
+    });
+	
+
+}); //onClick
+
+
+</script>

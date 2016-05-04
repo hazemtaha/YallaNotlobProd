@@ -1,0 +1,48 @@
+<div class="container">
+    <div class="row">      
+            <div class="page-header text-center">
+                <h1>Orders</h1>
+                <font><%= link_to 'Add new order' , new_order_url %></font>
+            </div> 
+    </div>   
+	<div class="row table-responsive">
+    	<table class="table table-bordered table-hover">
+        	<thead >
+            	<tr class="info ">
+                	<th>Order </th>
+	                <th>Resturant</th>
+	                <th>Invited</th>
+	                <th>Joined</th>
+	                <th>Status</th>
+	                <th>Actions</th>
+
+            	</tr>
+        	</thead>
+        	<tbody>
+				<% @orders.each do |order| %>
+        		<tr>
+        			<% if order.order_type == 1  %>
+							<% food  = 'BreakFast' %>
+						<% end	%>
+						<% if order.order_type == 2  %>
+							<% food  = 'Launch' %>
+						<% end	%>
+						<% if order.order_type == 3  %>
+							<% food  = 'Dinner' %>
+						<% end	%>
+
+						<td> <%= food %> </td>
+	        			<td> <%= order.destination%> </td>
+	        			<td></td>
+	        			<td></td>
+	        			<td><%= order.status %></td>
+	        			<td><%= link_to 'View' , order_url(order) %> -
+							<%= link_to 'finish' , order_url(order)  %> -
+							<%= link_to 'cancel' ,  order_url(order) %> 
+	        			</td>
+        			<% end %>
+        		</tr>
+        	</tbody>
+        </table>
+    </div>
+</div>

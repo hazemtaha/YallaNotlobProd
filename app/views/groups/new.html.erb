@@ -1,0 +1,159 @@
+<h1><code>Add New Group</code></h1>
+
+<%= render 'form' %>
+
+
+<br><br>
+<div class="container col-sm-offset-0.5 col-sm-5">
+	<div class="panel panel-danger">
+  		<div class="panel-heading" align="center"><h4>My Groups</h4></div>
+  		<div class="panel-body">
+			
+
+<table class="table table-hover">
+   			 <thead>
+      				<tr>
+        				<th>Group Name</th>
+        				<th colspan="2" align="center">Actions</th>
+      				</tr>
+    		</thead>
+    		<tbody>
+        		    <% @group.each do |groups| %>
+      				<tr>
+						<td><%= groups.name %></td>
+						<td><a id="group<%= groups.id %>" href="#" class="addGroup">Add</a></td>
+						<td><%= link_to 'Destroy', group_path(groups),
+              					method: :delete,
+              					data: { confirm: 'Are you sure you want to delete?' } %></td>	
+      					</tr>
+      				<% end %>
+    		</tbody>
+  </table>  			
+
+
+
+
+
+  		</div>
+	</div>
+
+</div>  
+
+<div class="container col-sm-6" id="friend">
+		<div class="panel panel-danger">
+  		<div class="panel-heading" align="center"><h4 id="gName"></h4></div>
+  		<div class="panel-body">
+        <%= render 'friends/form' %>
+        <!-- The Div that show friends of that group -->
+        <div class="row gmembers">
+
+        </div>
+        <!-- End Of the show -->
+  		</div>
+  		</div>
+	 
+</div>
+
+<script type="text/javascript">
+
+document.getElementById('friend').style.visibility = 'hidden';
+
+$('.addGroup').click(function(e){
+  document.getElementById('friend').style.visibility = 'visible';     
+	$gId = $(e.target).attr("id");
+	$cId = $gId.substr(5,$gId.length-1);
+	console.log($cId);	
+	$.ajax({
+        url: "/groups/"+$cId+"/getName",
+        method: 'POST',
+        data: {
+            id: $cId,
+        },
+        success: function(response) {
+        	 //console.log(response.members[0].username);
+           //console.log(response.name);
+           $('#gName').text(response.name);
+          //empty the row first before appending the data
+          $('.gmembers').empty();
+          $.each(response.members,function(key,value){
+            //console.log(value.username);
+          $('.gmembers').append(
+                      "<div class='col-sm-offset-1  col-sm-3'><div class='panel-success deleteFriend'><img src="+value.image.url+" class='img-circle' alt='Cinque Terre' width='120' height='100'><div class='textDesc' align='center'><h4><code>"+value.username+"</code></h4><a href='#' class='removeFriend' id='remove"+value.id+"'>Remove</a></div></img></div></div>"  
+                        );
+          }); //each
+//-------///////////////////////////////////////////////////////////////////////          
+          //to remove a friend add listener to the appending tag for eah friend
+          $('.removeFriend').click(function(e){
+          $filter = $(e.target).attr("id");
+          $fId = $filter.substr(6,$filter.length-1);
+          console.log($fId);  //friend ID
+          console.log($cId);  //group ID
+            //start our ajax request
+                   $.ajax({
+                    url: "/groups/"+$cId+"/deletefriend",
+                    method: 'DELETE',
+                    data:{
+                      groupId: $cId,
+                      friendId: $fId,
+                    },
+                    success: function(response) {
+                        console.log("friend has been deleted");
+                        console.log(response.username);
+                        $(e.target).parent().parent().parent().remove();
+                    },
+                    error: function(xmlHttpRequestObj, status, error) {
+                       console.log(error);
+                    },
+                   complete: function(xmlHttpRequestObj) {
+                      console.log("complete");
+                    },
+                      // dataType: 'json',
+                      async: true
+                    }); 
+          });
+//----------------------////////////////////////////////////////
+        },
+        error: function(xmlHttpRequestObj, status, error) {
+            console.log(error);
+        },
+        complete: function(xmlHttpRequestObj) {
+            console.log("complete");
+        },
+        // dataType: 'json',
+        async: true
+    });
+	
+}); //onClick
+
+
+
+
+//Another on click which is alone
+$('.addFriend').click(function(e){
+               var username = jQuery('.friendName').val();
+               console.log(username);
+               $.ajax({
+                    url: "/groups/"+$cId+"/addFriend",
+                    method: 'POST',
+                    data:{
+                      groupId: $cId,
+                      username: username,
+                    },
+                    success: function(friend) {
+                      $('.gmembers').append(
+                      "<div class='col-sm-offset-1  col-sm-3'><div class='panel-success'><img src="+friend.image.url+" class='img-circle' alt='Cinque Terre' width='120' height='100'><div class='textDesc' align='center'><h4><code>"+friend.username+"</code></h4><a href='#''>Remove</a></div></img></div></div>"  
+                        );
+                    },
+                    error: function(xmlHttpRequestObj, status, error) {
+                       console.log(error);
+                    },
+                   complete: function(xmlHttpRequestObj) {
+                      console.log("complete");
+                    },
+                      // dataType: 'json',
+                      async: true
+                    }); 
+});
+
+
+</script>

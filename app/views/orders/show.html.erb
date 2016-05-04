@@ -1,0 +1,131 @@
+<div class="container">
+  <div class="errors">
+
+  </div>
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="panel panel-primary">
+                <!-- Default panel contents -->
+                <div class="panel-heading">
+                    <h1><%= @order.order_type %> From <%=@order.destination.titleize %> Order Details</h1>
+                </div>
+                <div class="panel-body bg-info">
+                    <h3>
+                        <p class="text-warning">This order was created by "<%= @order.user.username.titleize %>"
+                            <small><%= time_ago_in_words @order.created_at %>  </small>
+                        </p>
+
+                    </h3>
+                </div>
+
+                <!-- Table -->
+                <table class="table table-bordered table-hover bg-info">
+                    <thead>
+                        <tr>
+                            <th class="col-sm-3">Person</th>
+                            <th class="col-sm-2">Item</th>
+                            <th class="col-sm-1">Amount</th>
+                            <th class="col-sm-1">Price</th>
+                            <th class="col-sm-4">Comment</th>
+                            <th class="col-sm-1">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody id="items">
+                      <% @order_items.each do |item| %>
+                        <tr>
+                            <td class="col-sm-3"><%= item.user.username.titleize %></td>
+                            <td class="col-sm-2"><%= item.item.titleize %></td>
+                            <td class="col-sm-1"><%= item.amount %></td>
+                            <td class="col-sm-1"><%= item.price %></td>
+                            <td class="col-sm-4"><%= item.comment.titleize %></td>
+                            <% if current_user.id == item.user_id %>
+                              <td id="deleteItem<%= item.id %>" class="col-sm-1 btn glyphicon glyphicon-remove delete-item"></td>
+                            <% else %>
+                              <td></td>
+                            <% end %>
+                        </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--  right side -->
+        <div class="col-sm-4">
+            <h3>
+                <span class="label label-primary">
+                    <%= pluralize @order.order_invites.where(invite_status: "0").count ,"Pending invite"%>
+                    <a id="invited" href="#modal" data-toggle="modal" class="text-danger">
+                        <strong>click to view</strong>
+                    </a>
+                </span>
+            </h3>
+            <h3>
+                <span class="label label-primary">
+                    <%= pluralize @order.order_invites.where(invite_status: "1").count ,"Friend"%> joined
+                    <a id="joined" href="#modal" data-toggle="modal" class="text-danger">
+                        <strong>click to view</strong>
+                    </a>
+                </span>
+            </h3>
+            <br>
+            <!--  menu image -->
+            <div class="thumbnail">
+              <div class="caption">
+                <h4 class="text-center">Menu Image</h4>
+              </div>
+              <img src="<%= @order.menu_img %>" alt="">
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">Add Item</h3>
+        </div>
+        <div class="panel-body" >
+<%= form_for([@order,@order_item], :url => order_items_path(@order), html: { class: "form-inline" }, remote: true) do |f| %>
+            <div class="form-group">
+                <%= f.label :item, {class: "control-label"}%>
+                <%= f.text_field :item, class: "form-control" %>
+            </div>
+            <div class="form-group">
+                <%= f.label :amount, {class: "control-label"}%>
+                <%= f.number_field :amount, class: "form-control" %>
+            </div>
+            <div class="form-group">
+                <%= f.label :price, {class: "control-label"}%>
+                <%= f.number_field :price, class: "form-control" %>
+            </div>
+            <div class="form-group">
+                <%= f.label :comment, {class: "control-label"}%>
+                <%= f.text_field :comment, class: "form-control" %>
+            </div>
+            <%= f.hidden_field :user_id, value: current_user.id %>
+            <%= f.hidden_field :order_id, value: @order.id %>
+
+            <%= f.submit 'Add', class: "form-control" %>
+
+            <!-- <a class="btn btn-primary">Add</a> -->
+            <% end %>
+            <!-- </div> -->
+        </div>
+    </div>
+
+</div>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="">Friends Invited</h4>
+      </div>
+      <div class="modal-body row">
+        <!--  -->
+
+        <!--  -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

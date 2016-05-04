@@ -1,0 +1,33 @@
+$(function(){
+  <% if @order_item.errors.any? %>
+    <%= render :partial=>'errors' , :locals=> { :target => @order_item } %>
+  <% else %>
+    $('#items').prepend(
+      $('<tr/>')
+        .append(
+          $('<td/>')
+            .addClass("col-sm-3")
+            .text('<%= @order_item.user.username.titleize %>')
+          ).append(
+            $('<td/>')
+              .addClass("col-sm-2")
+              .text('<%= @order_item.item.titleize %>')
+          ).append(
+            $('<td/>')
+              .addClass("col-sm-1")
+              .text('<%= @order_item.amount %>')
+          ).append(
+            $('<td/>')
+              .addClass("col-sm-1")
+              .text('<%= @order_item.price %>')
+          ).append(
+            $('<td/>')
+              .addClass("col-sm-4")
+              .text('<%= @order_item.comment.titleize %>')
+          ).append(
+            $('<td/>')
+              .addClass("col-sm-1 btn glyphicon glyphicon-remove")
+          )
+      )
+  <% end %>
+});

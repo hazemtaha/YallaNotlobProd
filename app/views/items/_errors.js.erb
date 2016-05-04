@@ -1,0 +1,9 @@
+$(function(){
+  $('.errors').empty();
+  $('.errors').append('<ul id="errors_ul" class="alert  alert-danger">');
+  <% target.errors.full_messages.each do |error| %>
+    $('#errors_ul').append(' <li class="col-sm-offset-1"><strong> <%= escape_javascript( error ) %><strong/></li>');
+  <% end %>
+  $('.errors').append('<ul/>');
+});
+ 
