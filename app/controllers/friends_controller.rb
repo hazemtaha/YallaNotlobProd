@@ -39,7 +39,7 @@ if User.exists? username: @parameter
 				puts "this guy is full of data"				
 			end
 else
-			@error_notValid = {'notValid': 'This user is not exist !'}
+			@error_notValid = {notValid: 'This user is not exist !'}
 			puts "Nooo it is a robot"
 			render json: @error_notValid				
 end	
