@@ -19,7 +19,7 @@ config.secret_key = '841a0a62ff7dc18897918368081b2a87b604e6432369ed4642f0986f60c
       helper :subdomain 
     end
   # Configure the class responsible to send e-mails.
-  #config.mailer = 'Devise::Mailer'
+  config.mailer = 'Devise::Mailer'
 
   # Configure the parent class responsible to send e-mails.
   # config.parent_mailer = 'ActionMailer::Base'
