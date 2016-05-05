@@ -1,38 +1,35 @@
 <h1><code>Add New Group</code></h1>
-            <!-- Errors -->
-        <strong id="groupErrors" class="col-sm-offset-2 col-sm-8" style='color:red;'></strong>
-        <!-- Errors -->
 
-<%= render 'form' %>
+    <!-- Errors -->
+    <strong id="groupErrors" class="col-sm-offset-2 col-sm-8" style='color:red;'></strong>
+    <!-- Errors -->
 
-
-
-<br><br>
+    <%= render 'form' %>
+    <br><br>
 <div class="container col-sm-offset-0.5 col-sm-5">
-	<div class="panel panel-danger">
+	 <div class="panel panel-danger">
   		<div class="panel-heading" align="center"><h4>My Groups</h4></div>
-  		<div class="panel-body">
-			
+  		   <div class="panel-body">
 
-<table class="table table-hover">
-   			 <thead>
-      				<tr>
-        				<th>Group Name</th>
-        				<th colspan="2" align="center">Actions</th>
-      				</tr>
-    		</thead>
-    		<tbody id="table">
+            <table class="table table-hover">
+   			      <thead>
+      				       <tr>
+                  			 <th>Group Name</th>
+          				       <th colspan="2" align="center">Actions</th>
+      				       </tr>
+    		      </thead>
+    		     <tbody id="table">
         		    <% @group.each do |groups| %>
       				<tr>
 						<td><%= groups.name %></td>
 						<td><a id="group<%= groups.id %>" href="#" class="addGroup">Add</a></td>
 						<td><%= link_to 'Destroy', group_path(groups),
               					method: :delete,
-              					data: { confirm: 'Are you sure you want to delete?' } %></td>	
+              					data: { confirm: 'Are you sure you want to delete?' } %></td>
       					</tr>
       				<% end %>
     		</tbody>
-  </table>  			
+  </table>
 
 
 
@@ -64,11 +61,11 @@
 
 document.getElementById('friend').style.visibility = 'hidden';
 
-$('.addGroup').click(function(e){
-  document.getElementById('friend').style.visibility = 'visible';     
+$('#table').on('click','.addGroup',function(e){
+  document.getElementById('friend').style.visibility = 'visible';
 	$gId = $(e.target).attr("id");
 	$cId = $gId.substr(5,$gId.length-1);
-	console.log($cId);	
+	console.log($cId);
 	$.ajax({
         url: "/groups/"+$cId+"/getName",
         method: 'POST',
@@ -84,12 +81,12 @@ $('.addGroup').click(function(e){
           $.each(response.members,function(key,value){
             //console.log(value.username);
           $('.gmembers').append(
-                      "<div class='col-sm-offset-1  col-sm-3'><div class='panel-success deleteFriend'><img src="+value.image.url+" class='img-circle' alt='Cinque Terre' width='120' height='100'><div class='textDesc' align='center'><h4><code>"+value.username+"</code></h4><a href='#' class='removeFriend' id='remove"+value.id+"'>Remove</a></div></img></div></div>"  
+                      "<div class='col-sm-offset-1  col-sm-3'><div class='panel-success deleteFriend'><img src="+value.image.url+" class='img-circle' alt='Cinque Terre' width='120' height='100'><div class='textDesc' align='center'><h4><code>"+value.username+"</code></h4><a href='#' class='removeFriend' id='remove"+value.id+"'>Remove</a></div></img></div></div>"
                         );
           }); //each
-//-------///////////////////////////////////////////////////////////////////////          
+//-------///////////////////////////////////////////////////////////////////////
           //to remove a friend add listener to the appending tag for eah friend
-          $('.removeFriend').click(function(e){
+          $('.gmembers').on ('click','.removeFriend', function(e){
           $filter = $(e.target).attr("id");
           $fId = $filter.substr(6,$filter.length-1);
           console.log($fId);  //friend ID
@@ -115,7 +112,7 @@ $('.addGroup').click(function(e){
                     },
                       // dataType: 'json',
                       async: true
-                    }); 
+                    });
           });
 //----------------------////////////////////////////////////////
         },
@@ -128,7 +125,7 @@ $('.addGroup').click(function(e){
         // dataType: 'json',
         async: true
     });
-	
+
 }); //onClick
 
 
@@ -157,28 +154,28 @@ if (typeof friend.nullValue === 'undefined') {
 
           if(typeof friend.same === 'undefined') {
 
-                      $('#error_null').empty();  
+                      $('#error_null').empty();
                       $('.gmembers').append(
-                      "<div class='col-sm-offset-1  col-sm-3'><div class='panel-success'><img src="+friend.image.url+" class='img-circle' alt='Cinque Terre' width='120' height='100'><div class='textDesc' align='center'><h4><code>"+friend.username+"</code></h4><a href='#''>Remove</a></div></img></div></div>"  
+                      "<div class='col-sm-offset-1  col-sm-3'><div class='panel-success'><img src="+friend.image.url+" class='img-circle' alt='Cinque Terre' width='120' height='100'><div class='textDesc' align='center'><h4><code>"+friend.username+"</code></h4><a href='#' class='removeFriend' id='remove"+friend.id+"'>Remove</a></div></img></div></div>"
                         );
            }else{
-                      $('#error_null').empty();  
+                      $('#error_null').empty();
                       $('#error_null').append("<strong style=color:red;> * "+friend.same+"</strong>");
-           }           
+           }
         }else{ //if it is not a friend
-                      $('#error_null').empty();  
+                      $('#error_null').empty();
                       $('#error_null').append("<strong style=color:red;> * "+friend.notFriend+"</strong>");
-            }          
+            }
       }else{ //if it is already assigned to the group
-                      $('#error_null').empty();  
+                      $('#error_null').empty();
                       $('#error_null').append("<strong style=color:red;> * "+friend.addExist+"</strong>");
-      }                
+      }
   }else{//if not valid
-                      $('#error_null').empty();  
+                      $('#error_null').empty();
                       $('#error_null').append("<strong style=color:red;> * "+friend.notExist+"</strong>");
-       }                                          
+       }
 }else{//if no null
-                      $('#error_null').empty();  
+                      $('#error_null').empty();
                       $('#error_null').append("<strong style=color:red;> * "+friend.nullValue+"</strong>");
 }
                     },
@@ -190,7 +187,7 @@ if (typeof friend.nullValue === 'undefined') {
                     },
                       // dataType: 'json',
                       async: true
-                    }); 
+                    });
 });
 
 

@@ -1,20 +1,19 @@
 <h1><code>Add Friends</code></h1>
-<p id="error_null" class="col-sm-3"></p>
+
+<div id="error_null" class="col-sm-offset-2 col-sm-8"></div><br>
+
 <%= render 'form' %>
 <br><br>
 <div class="container col-sm-offset-1 col-sm-9">
 	<div class="panel panel-danger">
   		<div class="panel-heading"><h4>Friends List</h4></div>
   		<div class="panel-body">
-  	
-
+        <input type="text" id="currentUser" hidden value="<%= current_user.id %>"></input>
   			<div class="row">
   			  <%= render :file => 'friends/show' %>
-  			</div>	
-			
-
+  			</div>
   		</div>
-  	</div>	
+  	</div>
 </div>
 
 
@@ -22,43 +21,42 @@
 
 $('.addFriend').click(function(e){
 	var name = jQuery('.friendName').val()
+  var Cuser = $('#currentUser').val()
 	//alert(username);
-	console.log(name);	
+  console.log(name);
 	$.ajax({
         url: "/friends",
         method: 'POST',
         data: {
             name: name,
         },
-        success: function(response) {    
+        success: function(response) {
         	//alert(response.value);
       if (typeof response.value === 'undefined'){
 
         if(typeof response.notValid === 'undefined'){
-        
-          $('#error_null').empty();  
+
+          $('#error_null').empty();
           if (typeof response.same === 'undefined'){
 
              if (typeof response.exist === 'undefined'){
-          $('.row').append(
-        		"<div class='col-sm-offset-1  col-sm-3'><div class='panel-success'><img src="+response.image.url+" class='img-circle' alt='Cinque Terre' width='170' height='150'><div class='textDesc' align='center'><h4><code>"+response.username+"</code></h4><a href='#''>Unfriend</a></div></img></div></div>"	
-        	     );
+          $('.row').append("<div class='col-sm-offset-1  col-sm-3'><div class='panel-success'><img src='"+response.image.url+"' class='img-circle' alt='Cinque Terre' width='170' height='150'><div class='textDesc' align='center'><h4><code>"+response.username+"</code></h4> <a data-confirm='Are you sure you want to delete friend?' rel='nofollow' data-method='delete' href='/friends?param1="+Cuser+"&amp;param2=%2B"+response.id+"%2B'>Unfriend</a>");
               }else{ //for exist user
-                $('#error_null').empty();  
-                $('#error_null').append("<strong> * "+response.exist+"</strong>");  
+                $('#error_null').empty();
+                $('#error_null').append("<strong style=color:red;> * "+response.exist+"</strong>");
               }
           }else{//for the same user
-              $('#error_null').empty();  
-              $('#error_null').append("<strong> * "+response.same+"</strong>");  
+              $('#error_null').empty();
+              $('#error_null').append("<strong style=color:red;> * "+response.same+"</strong>");
           };//else res.same user
         }else{
-           $('#error_null').empty();  
-           $('#error_null').append("<strong> * "+response.notValid+"</strong>");  
-        }  
+           $('#error_null').empty();
+           $('#error_null').append("<strong style=color:red;> * "+response.notValid+"</strong>");
+        }
       }else{ //for the response . value
-          $('#error_null').empty();  
-          //$('#error_null').text(response.value);  
-          $('#error_null').append("<strong> * "+response.value+"</strong>");  
+          $('#error_null').empty();
+          //$('#error_null').text(response.value);
+          $('#error_null').append("<strong style=color:red;> * "+response.value+"</strong>");
           };
 
         	console.log(response);
@@ -72,7 +70,7 @@ $('.addFriend').click(function(e){
           // dataType: 'json',
           async: true
     });
-	
+
 
 }); //onClick
 
