@@ -21,6 +21,7 @@
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
+                <% if user_signed_in? %>
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav">
                         <li class="active">
@@ -37,7 +38,9 @@
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                      <% if user_signed_in? %>
+                      <!-- Edit Profile -->
+                      <%= link_to "Edit Profile", edit_user_registration_path %>
+                        &nbsp; &nbsp;
                         <!-- Logout -->
                         <%= link_to "Logout", destroy_user_session_path, method: :delete %>
                         &nbsp; &nbsp;
